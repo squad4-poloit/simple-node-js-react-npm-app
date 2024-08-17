@@ -21,45 +21,19 @@ pipeline {
             }
         }
 
-        //stage('Run Unit Tests') {
-            //steps {
-               // script {
-                 //   sh 'npm test'
-                //}
-            //}
-        //}
-
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
                 script {
-                    sh """
-                    docker build -t ${DOCKER_IMAGE}:${env.BUILD_NUMBER} .
-                    docker tag ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ${DOCKER_IMAGE}:latest
-                    """
+                    sh 'npm run build'
                 }
             }
         }
 
-        stage('Docker Compose Up') {
+        stage('Start Application') {
             steps {
                 script {
-                    sh 'docker-compose up -d'
+                    sh 'npm start'
                 }
             }
         }
-    }
-
-    //post {
-        //always {
-            //echo 'Cleaning up...'
-            //sh 'docker-compose down'
-            //cleanWs()
-        //}
-        //success {
-            //echo 'Pipeline succeeded!'
-        //}
-        //failure {
-            //echo 'Pipeline failed!'
-        //}
-    //}
 }
